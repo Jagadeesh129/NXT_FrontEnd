@@ -20,18 +20,36 @@ const Signup = () => {
   const validateInputs = () => {
     let tempErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const allowedImageTypes = ["image/jpeg", "image/png"];
 
     if (!formData.name) tempErrors.name = "Name is required";
     if (!formData.email) tempErrors.email = "Email is required";
     else if (!emailRegex.test(formData.email)) tempErrors.email = "Invalid email format";
+
     if (!formData.password) tempErrors.password = "Password is required";
+    else if (!passwordRegex.test(formData.password)) {
+      tempErrors.password = "Password must contain at least 1 lowercase, 1 uppercase, 1 number, 1 special character, and be at least 8 characters long";
+    }
+
     if (!formData.confirmPassword) tempErrors.confirmPassword = "Confirm password is required";
-    if (formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword) {
+    else if (formData.password !== formData.confirmPassword) {
       tempErrors.confirmPassword = "Passwords do not match";
     }
+
     if (!formData.companyName) tempErrors.companyName = "Company name is required";
     if (!formData.dateOfBirth) tempErrors.dateOfBirth = "Date of Birth is required";
+    else if (new Date(formData.dateOfBirth) > new Date()) {
+      tempErrors.dateOfBirth = "Date of Birth cannot be in the future";
+    }
+
     if (!formData.photo) tempErrors.photo = "Profile image is required";
+    else if (!allowedImageTypes.includes(formData.photo.type)) {
+      tempErrors.photo = "Only JPG, JPEG, and PNG files are allowed";
+    }
+    else if (formData.photo.size > 5 * 1024 * 1024) {
+      tempErrors.photo = "Image size must be less than 5MB";
+    }
 
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
