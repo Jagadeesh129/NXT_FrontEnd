@@ -1,4 +1,5 @@
 {
+  "homepage": "https://Jagadeesh129.github.io/NXT_FrontEnd",
   "name": "auth-frontend",
   "private": true,
   "version": "0.0.0",
@@ -7,6 +8,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "preview": "vite preview",
     "tailwind": "npx @tailwindcss/cli -i ./src/input.css -o ./src/output.css --watch"
   },
